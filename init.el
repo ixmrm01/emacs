@@ -57,43 +57,10 @@
   :config
   (load-theme 'zenburn t))
 
-;; Rust major mode
-(use-package rust-mode
-  :ensure t
-  :config
-  (setq rust-format-on-save t))
-;;  :init
-;;  (setq rust-mode-treesitter-derive t))
-
 ;; C / C++ mode
 (use-package cc-mode
-  :ensure t)
-
-;; Tree Sitter
-;;(use-package tree-sitter
-;;  :config
-;;  (require 'tree-sitter-langs)
-;;  (global-tree-sitter-mode)
-;;  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
-
-;; Completion frontend
-(use-package company
   :ensure t
-  :hook (after-init . global-company-mode)
-  :bind
-  (:map company-active-map
-              ("C-n". company-select-next)
-              ("C-p". company-select-previous)
-              ("M-<". company-select-first)
-              ("M->". company-select-last))
-  (:map company-mode-map
-        ("<tab>". tab-indent-or-complete)
-        ("TAB". tab-indent-or-complete)))
-
-(defun company-yasnippet-or-completion ()
-  (interactive)
-  (or (do-yas-expand)
-      (company-complete-common)))
+  :mode ("\\.h\\'" . c++-mode))
 
 (defun check-expansion ()
   (save-excursion
@@ -117,21 +84,29 @@
             (company-complete-common)
           (indent-for-tab-command)))))
 
+;; Completion frontend
+(use-package company
+  :ensure t
+  :hook (after-init . global-company-mode)
+  :bind
+  (:map company-active-map
+              ("C-n". company-select-next)
+              ("C-p". company-select-previous)
+              ("M-<". company-select-first)
+              ("M->". company-select-last))
+  (:map company-mode-map
+        ("<tab>". tab-indent-or-complete)
+        ("TAB". tab-indent-or-complete)))
+
 ;; Snippets
 (use-package yasnippet
   :ensure t
   :hook (afer-init . yas-global-mode))
-;;  :config
-;;  (yas-reload-all)
-;;  (add-hook 'prog-mode-hook 'yas-minor-mode)
-;;  (add-hook 'text-mode-hook 'yas-minor-mode))
 
 ;; Eglot configuration
 (use-package eglot
   :ensure t
-;;  :hook (rust-mode . eglot-ensure)
-  :hook ((rust-mode c-mode c++-mode) . eglot-ensure)
+  :hook ((c-mode c++-mode) . eglot-ensure)
   :config
   (add-to-list 'eglot-server-programs
-               '(rust-mode . ("rust-analyzer"))
-               '((c++-mode c-mode) . ("clangd"))))
+               '((c-mode c++-mode) . ("clangd"))))
