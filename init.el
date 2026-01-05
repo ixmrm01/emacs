@@ -1,3 +1,6 @@
+;; ----------------
+;; Package setup
+;; ----------------
 (require 'package)
 
 (setq package-enable-at-startup nil)
@@ -16,6 +19,9 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+;; ----------------
+;; Helpful behavior
+;; ----------------
 (setq-default
   inhibit-startup-message t
 
@@ -51,17 +57,24 @@
 
 (scroll-bar-mode -1)
 
+;; ----------------
 ;; Zenburn theme
+;; ----------------
 (use-package zenburn-theme
   :ensure t
   :config
   (load-theme 'zenburn t))
 
+;; ----------------
 ;; C / C++ mode
+;; ----------------
 (use-package cc-mode
   :ensure t
   :mode ("\\.h\\'" . c++-mode))
 
+;; ----------------
+;; tab indent or complete
+;; ----------------
 (defun check-expansion ()
   (save-excursion
     (if (looking-at "\\_>") t
@@ -84,7 +97,9 @@
             (company-complete-common)
           (indent-for-tab-command)))))
 
-;; Completion frontend
+;; ----------------
+;; Completion
+;; ----------------
 (use-package company
   :ensure t
   :hook (after-init . global-company-mode)
@@ -98,12 +113,16 @@
         ("<tab>". tab-indent-or-complete)
         ("TAB". tab-indent-or-complete)))
 
+;; ----------------
 ;; Snippets
+;; ----------------
 (use-package yasnippet
   :ensure t
   :hook (afer-init . yas-global-mode))
 
-;; Eglot configuration
+;; ----------------
+;; Eglot (LSP)
+;; ----------------
 (use-package eglot
   :ensure t
   :hook ((c-mode c++-mode) . eglot-ensure)
