@@ -73,6 +73,16 @@
   :mode ("\\.h\\'" . c++-mode))
 
 ;; ----------------
+;; Snippets
+;; ----------------
+(use-package yasnippet
+  :ensure t
+  :config
+  (yas-reload-all)
+  (add-hook 'prog-mode-hook 'yas-minor-mode)
+  (add-hook 'text-mode-hook 'yas-minor-mode))
+
+;; ----------------
 ;; tab indent or complete
 ;; ----------------
 (defun check-expansion ()
@@ -102,7 +112,10 @@
 ;; ----------------
 (use-package company
   :ensure t
-  :hook (after-init . global-company-mode)
+  :init
+  (global-company-mode 1)
+  :custom
+  (company-idle-delay 2.0)
   :bind
   (:map company-active-map
               ("C-n". company-select-next)
@@ -112,13 +125,6 @@
   (:map company-mode-map
         ("<tab>". tab-indent-or-complete)
         ("TAB". tab-indent-or-complete)))
-
-;; ----------------
-;; Snippets
-;; ----------------
-(use-package yasnippet
-  :ensure t
-  :hook (afer-init . yas-global-mode))
 
 ;; ----------------
 ;; Eglot (LSP)
